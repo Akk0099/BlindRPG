@@ -29,6 +29,15 @@ def constructCharPanel(author, char):
     return embed
 
 
+async def raceInfo(client, channel):
+    embed = discord.Embed(title="Race Info", colour=0xee3b3b)
+    embed.add_field(name="Orc", value="STR +4 | AGL +2 | INT +0 | MND +1", inline=False)
+    embed.add_field(name="Human", value="STR +2 | AGL +2 | INT +2 | MND +1", inline=False)
+    embed.add_field(name="Elf", value="STR +1 | AGL +2 | INT +2 | MND +2", inline=False)
+    embed.add_field(name="Fairy", value="STR +0 | AGL +1 | INT +2 | MND +4", inline=False)
+    await client.get_channel(channel).send(embed=embed)
+
+
 async def chooseGender(client, game, channel, author, gender):
     if checkGender(gender):
         await client.get_channel(channel).send(game.changeChar(author.id, "gender", gender))
