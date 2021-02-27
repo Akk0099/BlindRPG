@@ -28,7 +28,7 @@ async def on_message(message):
         if content[1] == "create":
             game.createChar(message.author.id)
             await client.get_channel(testCh).send("Character created !")
-            await client.get_channel(testCh).send(game.getChar(message.author.id))
+            #await client.get_channel(testCh).send(game.getChar(message.author.id))
         if content[1] == "name":
             game.changeChar(message.author.id, "name", content[2])
             await client.get_channel(testCh).send("Character name changed !")
