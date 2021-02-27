@@ -1,6 +1,6 @@
 # Python program showing
 # a use of input()
-import BlindRPG as rpg
+from src import BlindRPG as rpg
 
 game = rpg.BlindRPG()
 game.createChar(1)

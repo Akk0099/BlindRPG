@@ -27,3 +27,17 @@ def constructCharPanel(author, char):
     embed.add_field(name="Intelligence", value=char["intelligence"])
     embed.add_field(name="Mind", value=char["mind"])
     return embed
+
+
+async def chooseGender(client, game, channel, author, gender):
+    if checkGender(gender):
+        await client.get_channel(channel).send(game.changeChar(author.id, "gender", gender))
+        await client.get_channel(channel).send(
+            embed=constructCharPanel(author, game.getChar(author.id)))
+    else:
+        await client.get_channel(channel).send(
+            "Pick Male or Female. The gender **{}** is not supported.".format(gender))
+
+
+def checkGender(gender):
+    return gender == ("Male" or "Female")

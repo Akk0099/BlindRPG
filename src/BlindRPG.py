@@ -1,4 +1,4 @@
-import Character as Char
+from .Character import Character
 
 
 class BlindRPG:
@@ -8,11 +8,12 @@ class BlindRPG:
         pass
 
     def createChar(self, id):
-        char = Char.Character()
+        char = Character()
         newChar = {id: char}
         self.chars.update(newChar)
+        return "Character created !"
 
-    def getChar (self, id):
+    def getChar(self, id):
         return self.chars[id].__dict__
 
     def printchars(self):
@@ -23,3 +24,4 @@ class BlindRPG:
     def changeChar(self, id, field, value):
         if self.chars[id]:
             self.chars[id].changeField(field, value)
+        return "Character {} changed !".format(field)

@@ -36,6 +36,12 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\anton\Desktop\Projects\BlindRPG\src" />
+      <recent name="C:\Users\anton\Desktop\Projects\BlindRPG\tests" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.bot">
     <configuration name="bot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="BlindRPG" />
@@ -72,7 +78,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\anton\Desktop\Projects\BlindRPG\tests\test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -98,7 +104,8 @@
       <updated>1614439324623</updated>
       <workItem from="1614439331985" duration="56000" />
       <workItem from="1614439393766" duration="7223000" />
-      <workItem from="1614447766465" duration="1212000" />
+      <workItem from="1614447766465" duration="1368000" />
+      <workItem from="1614451538021" duration="4383000" />
     </task>
     <servers />
   </component>
@@ -109,7 +116,7 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BlindRPG$bot.coverage" NAME="bot Coverage Results" MODIFIED="1614448876648" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BlindRPG$bot.coverage" NAME="bot Coverage Results" MODIFIED="1614456435047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlindRPG$test.coverage" NAME="test Coverage Results" MODIFIED="1614443455247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
