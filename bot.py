@@ -33,17 +33,15 @@ async def on_message(message):
         if content[1] == "gender":
             await Util.chooseGender(client=client, game=game, channel=testCh, author=message.author, gender=content[2])
         if content[1] == "race":
-            await client.get_channel(testCh).send(game.changeChar(message.author.id, "race", content[2]))
-            await client.get_channel(testCh).send(
-                embed=Util.constructCharPanel(author=message.author, char=game.getChar(message.author.id)))
+            await Util.chooseRace(client=client, game=game, channel=testCh, author=message.author, race=content[2])
         if content[1] == "job":
-            await client.get_channel(testCh).send(game.changeChar(message.author.id, "job", content[2]))
-            await client.get_channel(testCh).send(
-                embed=Util.constructCharPanel(author=message.author, char=game.getChar(message.author.id)))
+            await Util.chooseJob(client=client, game=game, channel=testCh, author=message.author, job=content[2])
         if content[1] == "help":
             await client.get_channel(testCh).send("Still working on this command. xD")
         if content[1] == "race-info":
             await Util.raceInfo(client=client, channel=testCh)
+        if content[1] == "job-info":
+            await Util.jobInfo(client=client, channel=testCh)
 
 
 client.run(TOKEN)
