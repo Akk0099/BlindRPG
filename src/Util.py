@@ -65,36 +65,76 @@ async def helpInfo(client, channel):
     await client.get_channel(channel).send(embed=embed)
 
 
-async def chooseGender(client, game, channel, author, gender):
-    if checkGender(gender):
-        await client.get_channel(channel).send(game.changeChar(author.id, "gender", gender))
+async def chooseName(client, game, channel, author, name):
+    c = checkExists(id=author.id, game=game)
+    if c:
+        await client.get_channel(channel).send(game.changeChar(author.id, "name", name))
         await client.get_channel(channel).send(
-            embed=constructCharPanel(author, game.getChar(author.id)))
+            embed=constructCharPanel(author=author, char=game.getChar(author.id)))
     else:
-        await client.get_channel(channel).send(
-            "Pick Male or Female. The gender **{}** is not supported.".format(gender))
+        await notCreatedYetMessage(client=client, channel=channel)
+
+
+async def chooseGender(client, game, channel, author, gender):
+    c = checkExists(id=author.id, game=game)
+    if c:
+        if checkGender(gender):
+            await client.get_channel(channel).send(game.changeChar(author.id, "gender", gender))
+            await client.get_channel(channel).send(
+                embed=constructCharPanel(author, game.getChar(author.id)))
+        else:
+            await client.get_channel(channel).send(
+                "Pick Male or Female. The gender **{}** is not supported.".format(gender))
+    else:
+        await notCreatedYetMessage(client=client, channel=channel)
 
 
 async def chooseJob(client, game, channel, author, job):
-    if checkJob(job):
-        await client.get_channel(channel).send(game.changeJob(author.id, job))
-        await client.get_channel(channel).send(
-            embed=constructCharPanel(author=author, char=game.getChar(author.id)))
+    c = checkExists(id=author.id, game=game)
+    if c:
+        if checkJob(job):
+            await client.get_channel(channel).send(game.changeJob(author.id, job))
+            await client.get_channel(channel).send(
+                embed=constructCharPanel(author=author, char=game.getChar(author.id)))
+        else:
+            await client.get_channel(channel).send(
+                "The job **{}** is not supported. Pick one of the follwing jobs: Paladin/Archer/Wizard/Conjurer.".format(
+                    job) + "\n" + "```fix" + "\n" + "More info use !rpg job-info```")
     else:
-        await client.get_channel(channel).send(
-            "The job **{}** is not supported. Pick one of the follwing jobs: Paladin/Archer/Wizard/Conjurer.".format(
-                job) + "\n" + "```fix" + "\n" + "More info use !rpg job-info```")
+        await notCreatedYetMessage(client=client, channel=channel)
 
 
 async def chooseRace(client, game, channel, author, race):
-    if checkRace(race):
-        await client.get_channel(channel).send(game.changeRace(author.id, race))
+    c = checkExists(id=author.id, game=game)
+    if c:
+        if checkRace(race):
+            await client.get_channel(channel).send(game.changeRace(author.id, race))
+            await client.get_channel(channel).send(
+                embed=constructCharPanel(author=author, char=game.getChar(author.id)))
+        else:
+            await client.get_channel(channel).send(
+                "The race **{}** is not supported. Pick one of the follwing races: Orc/Human/Elf/Fairy.".format(
+                    race) + "\n" + "```fix" + "\n" + "More info use !rpg race-info```")
+    else:
+        await notCreatedYetMessage(client=client, channel=channel)
+
+
+async def getMe(client, game, channel, author):
+    c = checkExists(id=author.id, game=game)
+    if c:
         await client.get_channel(channel).send(
             embed=constructCharPanel(author=author, char=game.getChar(author.id)))
     else:
-        await client.get_channel(channel).send(
-            "The race **{}** is not supported. Pick one of the follwing races: Orc/Human/Elf/Fairy.".format(
-                race) + "\n" + "```fix" + "\n" + "More info use !rpg race-info```")
+        await notCreatedYetMessage(client=client, channel=channel)
+
+
+async def notCreatedYetMessage(client, channel):
+    await client.get_channel(channel).send(
+        "You don't have a character created yet." + "```fix" + "\n" + "More info use !rpg help```")
+
+
+def checkExists(id, game):
+    return game.getChar(id)
 
 
 def checkGender(gender):

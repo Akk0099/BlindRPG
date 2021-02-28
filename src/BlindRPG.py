@@ -17,7 +17,10 @@ class BlindRPG:
         return "Character created !"
 
     def getChar(self, id):
-        return self.chars[id].__dict__
+        if (id in self.chars):
+            return self.chars[id].__dict__
+        else:
+            return None
 
     def printchars(self):
         for char in self.chars:

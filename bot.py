@@ -9,7 +9,8 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
 game = BlindRPG.BlindRPG()
-testCh = 704712658330451978
+testChJP = 704712658330451978
+testChUNI = 815375116254969878
 
 
 @client.event
@@ -22,29 +23,31 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    if message.channel.id not in {testChJP, testChUNI}:
+        return
+
+    channel = message.channel.id
+
     content = message.content.split()
     if content[0] == "!rpg":
         if content[1] == "create":
-            await client.get_channel(testCh).send(game.createChar(message.author.id))
+            await client.get_channel(channel).send(game.createChar(message.author.id))
         if content[1] == "name":
-            await client.get_channel(testCh).send(game.changeChar(message.author.id, "name", content[2]))
-            await client.get_channel(testCh).send(
-                embed=Util.constructCharPanel(author=message.author, char=game.getChar(message.author.id)))
+            await Util.chooseName(client=client, game=game, channel=channel, author=message.author, name=content[2])
         if content[1] == "gender":
-            await Util.chooseGender(client=client, game=game, channel=testCh, author=message.author, gender=content[2])
+            await Util.chooseGender(client=client, game=game, channel=channel, author=message.author, gender=content[2])
         if content[1] == "race":
-            await Util.chooseRace(client=client, game=game, channel=testCh, author=message.author, race=content[2])
+            await Util.chooseRace(client=client, game=game, channel=channel, author=message.author, race=content[2])
         if content[1] == "job":
-            await Util.chooseJob(client=client, game=game, channel=testCh, author=message.author, job=content[2])
+            await Util.chooseJob(client=client, game=game, channel=channel, author=message.author, job=content[2])
         if content[1] == "help":
-            await Util.helpInfo(client=client, channel=testCh)
+            await Util.helpInfo(client=client, channel=channel)
         if content[1] == "race-info":
-            await Util.raceInfo(client=client, channel=testCh)
+            await Util.raceInfo(client=client, channel=channel)
         if content[1] == "job-info":
-            await Util.jobInfo(client=client, channel=testCh)
+            await Util.jobInfo(client=client, channel=channel)
         if content[1] == "me":
-            await client.get_channel(testCh).send(
-                embed=Util.constructCharPanel(author=message.author, char=game.getChar(message.author.id)))
+            await Util.getMe(client=client, game=game, channel=channel, author=message.author)
 
 
 client.run(TOKEN)
