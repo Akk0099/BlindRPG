@@ -105,7 +105,9 @@
       <workItem from="1614439331985" duration="56000" />
       <workItem from="1614439393766" duration="7223000" />
       <workItem from="1614447766465" duration="1368000" />
-      <workItem from="1614451538021" duration="7232000" />
+      <workItem from="1614451538021" duration="7275000" />
+      <workItem from="1614466108392" duration="3618000" />
+      <workItem from="1614476768298" duration="3208000" />
     </task>
     <servers />
   </component>
@@ -116,7 +118,7 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/BlindRPG$bot.coverage" NAME="bot Coverage Results" MODIFIED="1614459326841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BlindRPG$bot.coverage" NAME="bot Coverage Results" MODIFIED="1614479896930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlindRPG$test.coverage" NAME="test Coverage Results" MODIFIED="1614443455247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

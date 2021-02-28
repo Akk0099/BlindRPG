@@ -6,13 +6,13 @@ def constructCharPanel(author, char):
     embed.set_author(name="{} Character".format(author.name))
 
     ##Add Race / Class / Gender
-    if char["race"] != "":
-        embed.add_field(name="Race", value=char["race"])
+    if char["race"]:
+        embed.add_field(name="Race", value=char["race"].name)
     else:
         embed.add_field(name="Race", value="None")
 
-    if char["job"] != "":
-        embed.add_field(name="Job", value=char["job"])
+    if char["job"]:
+        embed.add_field(name="Job", value=char["job"].name)
     else:
         embed.add_field(name="Job", value="None")
 
@@ -22,10 +22,10 @@ def constructCharPanel(author, char):
         embed.add_field(name="Gender", value="None")
 
     ##Add Stats
-    embed.add_field(name="Strength", value=char["strength"])
-    embed.add_field(name="Agility", value=char["agility"])
-    embed.add_field(name="Intelligence", value=char["intelligence"])
-    embed.add_field(name="Mind", value=char["mind"])
+    embed.add_field(name="Strength", value=char["stats"].str)
+    embed.add_field(name="Agility", value=char["stats"].agl)
+    embed.add_field(name="Intelligence", value=char["stats"].int)
+    embed.add_field(name="Mind", value=char["stats"].mnd)
     return embed
 
 
@@ -47,6 +47,24 @@ async def jobInfo(client, channel):
     await client.get_channel(channel).send(embed=embed)
 
 
+async def helpInfo(client, channel):
+    embed = discord.Embed(title="Help Page",
+                          description="Card with the existent comands and small description of what each one does",
+                          colour=0xee3b3b)
+    embed.add_field(name="!rpg",
+                    value="Use this prefix before all the other commands so the bot can recognize them.", inline=False)
+    embed.add_field(name="create", value="Creates your character.", inline=False)
+    embed.add_field(name="name (name)", value="Gives your character a name.", inline=False)
+    embed.add_field(name="race (name)",
+                    value="Gives the race with the given name to your character. See more in race-info.", inline=False)
+    embed.add_field(name="job (name)", value="Gives the job with the given name to your character.", inline=False)
+    embed.add_field(name="gender (Male/Female)", value="Choose Male or Female gender for your character.", inline=False)
+    embed.add_field(name="race-info", value="Show all the information about the available races.", inline=False)
+    embed.add_field(name="job-info", value="Show all the information about the available jobs.", inline=False)
+    embed.add_field(name="me", value="Show you character card.", inline=False)
+    await client.get_channel(channel).send(embed=embed)
+
+
 async def chooseGender(client, game, channel, author, gender):
     if checkGender(gender):
         await client.get_channel(channel).send(game.changeChar(author.id, "gender", gender))
@@ -59,7 +77,7 @@ async def chooseGender(client, game, channel, author, gender):
 
 async def chooseJob(client, game, channel, author, job):
     if checkJob(job):
-        await client.get_channel(channel).send(game.changeChar(author.id, "job", job))
+        await client.get_channel(channel).send(game.changeJob(author.id, job))
         await client.get_channel(channel).send(
             embed=constructCharPanel(author=author, char=game.getChar(author.id)))
     else:
@@ -70,22 +88,22 @@ async def chooseJob(client, game, channel, author, job):
 
 async def chooseRace(client, game, channel, author, race):
     if checkRace(race):
-        await client.get_channel(channel).send(game.changeChar(author.id, "race", race))
+        await client.get_channel(channel).send(game.changeRace(author.id, race))
         await client.get_channel(channel).send(
             embed=constructCharPanel(author=author, char=game.getChar(author.id)))
     else:
         await client.get_channel(channel).send(
-            "The race **{}** is not supported. Pick one of the follwing jobs: Orc/Human/Elf/Fairy.".format(
+            "The race **{}** is not supported. Pick one of the follwing races: Orc/Human/Elf/Fairy.".format(
                 race) + "\n" + "```fix" + "\n" + "More info use !rpg race-info```")
 
 
 def checkGender(gender):
-    return gender == ("Male" or "Female")
+    return gender in {"Male", "Female"}
 
 
 def checkJob(job):
-    return job == ('Paladin' or 'Archer' or 'Wizard' or 'Conjurer')
+    return job in {'Paladin', 'Archer', 'Wizard', 'Conjurer'}
 
 
 def checkRace(race):
-    return race == ('Orc' or 'Human' or 'Elf' or 'Fairy')
+    return race in {'Orc' or 'Human' or 'Elf' or 'Fairy'}
