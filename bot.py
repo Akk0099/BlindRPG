@@ -1,14 +1,15 @@
 # bot.py
 import os
 import discord
-from src import Util, BlindRPG
+from src import Util, BlindRPG, Database
 from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+db = Database.Database()
 client = discord.Client()
-game = BlindRPG.BlindRPG()
+game = BlindRPG.BlindRPG(db=db)
 testChJP = 704712658330451978
 testChUNI = 815375116254969878
 
@@ -32,22 +33,24 @@ async def on_message(message):
     if content[0] == "!rpg":
         if content[1] == "create":
             await client.get_channel(channel).send(game.createChar(message.author.id))
-        if content[1] == "name":
+        elif content[1] == "name":
             await Util.chooseName(client=client, game=game, channel=channel, author=message.author, name=content[2])
-        if content[1] == "gender":
+        elif content[1] == "gender":
             await Util.chooseGender(client=client, game=game, channel=channel, author=message.author, gender=content[2])
-        if content[1] == "race":
+        elif content[1] == "race":
             await Util.chooseRace(client=client, game=game, channel=channel, author=message.author, race=content[2])
-        if content[1] == "job":
+        elif content[1] == "job":
             await Util.chooseJob(client=client, game=game, channel=channel, author=message.author, job=content[2])
-        if content[1] == "help":
+        elif content[1] == "help":
             await Util.helpInfo(client=client, channel=channel)
-        if content[1] == "race-info":
+        elif content[1] == "race-info":
             await Util.raceInfo(client=client, channel=channel)
-        if content[1] == "job-info":
+        elif content[1] == "job-info":
             await Util.jobInfo(client=client, channel=channel)
-        if content[1] == "me":
+        elif content[1] == "me":
             await Util.getMe(client=client, game=game, channel=channel, author=message.author)
+        else:
+            await Util.wrongCommand(client=client, channel=channel)
 
 
 client.run(TOKEN)
