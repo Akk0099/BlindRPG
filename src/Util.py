@@ -69,6 +69,10 @@ async def helpInfo(client, channel):
     await client.get_channel(channel).send(embed=embed)
 
 
+async def message(message):
+    return discord.Embed(title=message, colour=0x55a630)
+
+
 async def chooseName(client, game, channel, author, name):
     if game.getChar(id=author.id):
         await client.get_channel(channel).send(game.changeName(id=author.id, name=name))
@@ -139,3 +143,11 @@ async def wrongCommand(client, channel):
 
 def checkGender(gender):
     return gender in {"Male", "Female"}
+
+
+async def dailyTrain(client, game, channel, author):
+    if game.getChar(id=author.id):
+        await client.get_channel(channel).send(
+            embed=await message(message=game.dailyTrain(id=author.id)))
+    else:
+        await notCreatedYetMessage(client=client, channel=channel)

@@ -1,5 +1,6 @@
-# from .Character import Character, Job, Race
+from datetime import datetime
 from pony.orm import *
+import random
 
 
 class BlindRPG:
@@ -17,7 +18,7 @@ class BlindRPG:
     def createChar(self, id):
         statsC = self.db.Stats(str=0, agl=0, itl=0, mnd=0)
         statsI = self.db.Stats(str=0, agl=0, itl=0, mnd=0)
-        self.db.Character(id=str(id), currentStats=statsC, initialStats=statsI, level=0)
+        self.db.Character(id=str(id), currentStats=statsC, initialStats=statsI, level=0, dailyAction=datetime.now())
         self.db.commit()
         return "Character created !"
 
@@ -149,3 +150,64 @@ class BlindRPG:
         else:
             charStats = initStats
         self.db.commit()
+
+    @db_session
+    def updateInitialStats(self, charID, stat, value):
+        char = self.db.Character[str(charID)]
+        if (stat == "str"):
+            char.currentStats.str = char.currentStats.str + value
+            char.initialStats.str = char.initialStats.str + value
+        if (stat == "agl"):
+            char.currentStats.agl = char.currentStats.agl + value
+            char.initialStats.agl = char.initialStats.agl + value
+        if (stat == "itl"):
+            char.currentStats.itl = char.currentStats.itl + value
+            char.initialStats.itl = char.initialStats.itl + value
+        if (stat == "mnd"):
+            char.currentStats.mnd = char.currentStats.mnd + value
+            char.initialStats.mnd = char.initialStats.mnd + value
+        self.db.commit()
+
+    @db_session
+    def checkDailyAction(self, charID):
+        char = self.db.Character[str(charID)]
+        time = datetime.now()
+
+        # Uncomment in the future
+        # delta = (time - char.dailyAction).seconds >= 3600
+
+        delta = (time - char.dailyAction).seconds >= 15
+        if delta:
+            char.dailyAction = time
+            self.db.commit()
+            return delta
+        else:
+            return delta
+
+    def dailyTrain(self, id):
+        if self.checkDailyAction(id):
+            print("here")
+            if self.roll100Dice():
+                return "Daily train did not succeed."
+            else:
+                increase = self.roll4Dice()
+                stat = self.rollStatDice()
+                self.updateInitialStats(charID=id, stat=stat, value=increase)
+                return "Daily train was successful.{} was increased by {}.".format(stat, increase)
+        else:
+            print("not here")
+            return "Daily action unavailable."
+
+    def roll100Dice(self):
+        roll = random.randint(1, 100)
+        if roll <= 50:
+            return False
+        elif roll >= 51:
+            return True
+
+    def roll4Dice(self):
+        return random.randint(1, 4)
+
+    def rollStatDice(self):
+        stats = ["str", "agl", "itl", "mnd"]
+        return random.choice(stats)

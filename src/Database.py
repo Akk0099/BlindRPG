@@ -1,12 +1,17 @@
+from datetime import datetime
+
 from pony.orm import *
 from pony.orm import Database as PonyDatabase
 
 
 class Database:
 
-    def __init__(self):
+    def __init__(self, test):
         self.database = PonyDatabase()
-        self.database.bind(provider='sqlite', filename='../data/database.sqlite', create_db=True)
+        if (test):
+            self.database.bind(provider='sqlite', filename='../tests/database.sqlite', create_db=True)
+        else:
+            self.database.bind(provider='sqlite', filename='../data/database.sqlite', create_db=True)
 
         class Character(self.database.Entity):
             id = PrimaryKey(str)
@@ -17,6 +22,7 @@ class Database:
             job = Optional('Job')
             gender = Optional(str)
             initialStats = Required('Stats', reverse='charactersI')
+            dailyAction = Optional(datetime, 6)
 
         class Race(self.database.Entity):
             id = PrimaryKey(int, auto=True)

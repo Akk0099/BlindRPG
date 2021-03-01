@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-db = Database.Database()
+db = Database.Database(False)
 client = discord.Client()
 game = BlindRPG.BlindRPG(db=db)
 testChJP = 704712658330451978
@@ -49,6 +49,8 @@ async def on_message(message):
             await Util.jobInfo(client=client, channel=channel)
         elif content[1] == "me":
             await Util.getMe(client=client, game=game, channel=channel, author=message.author)
+        elif content[1] == "daily-train":
+            await Util.dailyTrain(client=client, game=game, channel=channel, author=message.author)
         else:
             await Util.wrongCommand(client=client, channel=channel)
 
