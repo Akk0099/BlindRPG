@@ -6,7 +6,7 @@ class Database:
 
     def __init__(self):
         self.database = PonyDatabase()
-        self.database.bind(provider='sqlite', filename='database.sqlite', create_db=True)
+        self.database.bind(provider='sqlite', filename='../data/database.sqlite', create_db=True)
 
         class Character(self.database.Entity):
             id = PrimaryKey(str)
