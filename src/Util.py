@@ -34,6 +34,10 @@ def constructCharPanel(author, char):
     embed.add_field(name="Agility", value=char["currentStats"]["agl"])
     embed.add_field(name="Intelligence", value=char["currentStats"]["itl"])
     embed.add_field(name="Mind", value=char["currentStats"]["mnd"])
+    embed.set_image(
+        url="https://www.pinclipart.com/picdir/middle/204-2043850_maple-story-2-classes-transparent-background-maplestory-2.png")
+    embed.set_thumbnail(
+        url="https://www.pinclipart.com/picdir/middle/204-2043850_maple-story-2-classes-transparent-background-maplestory-2.png")
     return embed
 
 
