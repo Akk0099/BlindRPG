@@ -192,7 +192,7 @@ class BlindRPG:
                 increase = self.roll4Dice()
                 stat = self.rollStatDice()
                 self.updateInitialStats(charID=id, stat=stat, value=increase)
-                return "Daily train was successful.{} was increased by {}.".format(stat, increase), True
+                return "Daily train was successful. {} was increased by {}.".format(stat.upper(), increase), True
         else:
             return "Daily action unavailable.", False
 
