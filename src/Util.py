@@ -38,7 +38,7 @@ def constructCharPanel(author, char):
 
 
 async def raceInfo(channel):
-    embed = discord.Embed(title="Race Info", colour=0xEE3B3B)
+    embed = discord.Embed(title="Race Info", colour=0xc9b216)
     embed.add_field(name="Orc", value="STR +4 | AGL +2 | INT +0 | MND +1", inline=False)
     embed.add_field(
         name="Human", value="STR +2 | AGL +2 | INT +2 | MND +1", inline=False
@@ -54,7 +54,7 @@ async def raceInfo(channel):
 
 
 async def jobInfo(channel):
-    embed = discord.Embed(title="Job Info", colour=0xEE3B3B)
+    embed = discord.Embed(title="Job Info", colour=0xc9b216)
     embed.add_field(
         name="Warrior", value="STR +4 | AGL +1 | INT +1 | MND +1", inline=False
     )
@@ -74,7 +74,7 @@ async def helpInfo(channel):
     embed = discord.Embed(
         title="Help Page",
         description="Card with the existent comands and small description of what each one does",
-        colour=0xEE3B3B,
+        colour=0xc9b216,
     )
     embed.add_field(
         name="!rpg",
@@ -115,8 +115,16 @@ async def helpInfo(channel):
     await channel.send(embed=embed)
 
 
-async def message(message):
+def failMessage(message):
+    return discord.Embed(title=message, colour=0xEE3B3B)
+
+
+def successMessage(message):
     return discord.Embed(title=message, colour=0x55a630)
+
+
+def infoMessage(message):
+    return discord.Embed(title=message, colour=0xc9b216)
 
 
 async def chooseName(game, channel, author, name):
@@ -137,11 +145,7 @@ async def chooseGender(game, channel, author, gender):
                 embed=constructCharPanel(author, game.getChar(id=author.id))
             )
         else:
-            await channel.send(
-                "Pick Male or Female. The gender **{}** is not supported.".format(
-                    gender
-                )
-            )
+            await channel.send(failMessage("Pick Male or Female. The gender **{}** is not supported.".format(gender)))
     else:
         await notCreatedYetMessage(channel=channel)
 
@@ -154,15 +158,9 @@ async def chooseRace(game, channel, author, race):
                 embed=constructCharPanel(author=author, char=game.getChar(author.id))
             )
         else:
-            await channel.send(
+            await channel.send(failMessage(
                 "The race **{}** is not supported. Pick one of the follwing races: Orc/Human/Elf/Fairy/Dragon.".format(
-                    race
-                )
-                + "\n"
-                + "```fix"
-                + "\n"
-                + "More info use !rpg race-info```"
-            )
+                    race)))
     else:
         await notCreatedYetMessage(channel=channel)
 
@@ -175,15 +173,9 @@ async def chooseJob(game, channel, author, job):
                 embed=constructCharPanel(author=author, char=game.getChar(id=author.id))
             )
         else:
-            await channel.send(
+            await channel.send(failMessage(
                 "The job **{}** is not supported. Pick one of the follwing jobs: Warrior/Archer/Sorcerer/Priest.".format(
-                    job
-                )
-                + "\n"
-                + "```fix"
-                + "\n"
-                + "More info use !rpg job-info```"
-            )
+                    job)))
     else:
         await notCreatedYetMessage(channel=channel)
 
@@ -198,12 +190,7 @@ async def getMe(game, channel, author):
 
 
 async def notCreatedYetMessage(channel):
-    await channel.send(
-        "You don't have a character created yet."
-        + "```fix"
-        + "\n"
-        + "More info use !rpg help```"
-    )
+    await channel.send(failMessage("You don't have a character created yet. More info use !rpg help"))
 
 
 async def wrongCommand(channel):
@@ -221,7 +208,10 @@ def checkGender(gender):
 
 async def dailyTrain(game, channel, author):
     if game.getChar(id=author.id):
-        await channel.send(
-            embed=await message(message=game.dailyTrain(id=author.id)))
+        result = game.dailyTrain(id=author.id)
+        if (result[1]):
+            await channel.send(embed=successMessage(result[0]))
+        else:
+            await channel.send(embed=failMessage(result[0]))
     else:
         await notCreatedYetMessage(channel=channel)
