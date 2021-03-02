@@ -211,4 +211,4 @@ async def wrongCommand(channel):
 
 
 def checkGender(gender):
-    return gender in {"Male", "Female", "Non-binary"}
+    return gender in {"Male", "Female"}
