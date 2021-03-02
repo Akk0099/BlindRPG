@@ -1,56 +1,83 @@
 # bot.py
 import os
 import discord
-from src import Util, BlindRPG, Database
+from discord.ext import commands
 from dotenv import load_dotenv
+from src import Util, BlindRPG, Database
+
+valid_channels = {704712658330451978, 815375116254969878}
 
 load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+TOKEN = os.getenv("DISCORD_TOKEN")
 
 db = Database.Database()
-client = discord.Client()
+client = commands.Bot(command_prefix="!rpg ")
 game = BlindRPG.BlindRPG(db=db)
-testChJP = 704712658330451978
-testChUNI = 815375116254969878
 
 
 @client.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f"{client.user} has connected to Discord!")
+
+
+# global check
+@client.check
+async def in_valid_channel(ctx):
+    return ctx.channel.id in valid_channels
+
+
+@client.command(name="create")
+async def createChar(ctx):
+    await ctx.send(game.createChar(ctx.author.id))
+
+
+@client.command(name="name")
+async def chooseName(ctx, arg):
+    await Util.chooseName(game=game, channel=ctx.channel, author=ctx.author, name=arg)
+
+
+@client.command(name="gender")
+async def chooseGender(ctx, arg):
+    await Util.chooseGender(
+        game=game, channel=ctx.channel, author=ctx.author, gender=arg
+    )
+
+
+@client.command(name="race")
+async def chooseRace(ctx, arg):
+    await Util.chooseRace(game=game, channel=ctx.channel, author=ctx.author, race=arg)
+
+
+@client.command(name="job")
+async def chooseJob(ctx, arg):
+    await Util.chooseJob(game=game, channel=ctx.channel, author=ctx.author, job=arg)
+
+
+@client.command(name="info")
+async def helpInfo(ctx):
+    await Util.helpInfo(channel=ctx.channel)
+
+
+@client.command(name="race-info")
+async def raceInfo(ctx):
+    await Util.raceInfo(channel=ctx.channel)
+
+
+@client.command(name="job-info")
+async def jobInfo(ctx):
+    await Util.jobInfo(channel=ctx.channel)
+
+
+@client.command(name="me")
+async def selfInfo(ctx):
+    await Util.getMe(game=game, channel=ctx.channel, author=ctx.author)
 
 
 @client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.channel.id not in {testChJP, testChUNI}:
-        return
-
-    channel = message.channel.id
-
-    content = message.content.split()
-    if content[0] == "!rpg":
-        if content[1] == "create":
-            await client.get_channel(channel).send(game.createChar(message.author.id))
-        elif content[1] == "name":
-            await Util.chooseName(client=client, game=game, channel=channel, author=message.author, name=content[2])
-        elif content[1] == "gender":
-            await Util.chooseGender(client=client, game=game, channel=channel, author=message.author, gender=content[2])
-        elif content[1] == "race":
-            await Util.chooseRace(client=client, game=game, channel=channel, author=message.author, race=content[2])
-        elif content[1] == "job":
-            await Util.chooseJob(client=client, game=game, channel=channel, author=message.author, job=content[2])
-        elif content[1] == "help":
-            await Util.helpInfo(client=client, channel=channel)
-        elif content[1] == "race-info":
-            await Util.raceInfo(client=client, channel=channel)
-        elif content[1] == "job-info":
-            await Util.jobInfo(client=client, channel=channel)
-        elif content[1] == "me":
-            await Util.getMe(client=client, game=game, channel=channel, author=message.author)
-        else:
-            await Util.wrongCommand(client=client, channel=channel)
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        return await Util.wrongCommand(channel=ctx.channel)
+    raise error
 
 
 client.run(TOKEN)
