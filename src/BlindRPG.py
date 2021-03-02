@@ -92,28 +92,28 @@ class BlindRPG:
     def loadJobsD(self):
         if not self.db.Job.select(lambda j: j.name == "Warrior").first():
             s1 = self.db.Stats(str=4, agl=1, itl=1, mnd=1)
-            self.db.Job(name="Warrior", stats=s1)
+            self.db.Job(name="Warrior", stats=s1, image="https://i.imgur.com/dHLGGNs.png")
             s2 = self.db.Stats(str=1, agl=4, itl=1, mnd=1)
-            self.db.Job(name="Archer", stats=s2)
+            self.db.Job(name="Archer", stats=s2, image="https://i.imgur.com/XrBkP1O.png")
             s3 = self.db.Stats(str=1, agl=1, itl=4, mnd=1)
-            self.db.Job(name="Sorcerer", stats=s3)
+            self.db.Job(name="Sorcerer", stats=s3, image="https://i.imgur.com/vpZLrxn.png")
             s4 = self.db.Stats(str=1, agl=1, itl=1, mnd=4)
-            self.db.Job(name="Priest", stats=s4)
+            self.db.Job(name="Priest", stats=s4, image="https://i.imgur.com/1XGAYei.png")
         self.db.commit()
 
     @db_session
     def loadRacesD(self):
         if not self.db.Race.select(lambda r: r.name == "Orc").first():
             s1 = self.db.Stats(str=4, agl=2, itl=0, mnd=1)
-            self.db.Race(name="Orc", stats=s1)
+            self.db.Race(name="Orc", stats=s1, faction="https://i.imgur.com/kcXnYg3.png")
             s2 = self.db.Stats(str=2, agl=2, itl=2, mnd=1)
-            self.db.Race(name="Human", stats=s2)
+            self.db.Race(name="Human", stats=s2, faction="https://i.imgur.com/kcXnYg3.png")
             s3 = self.db.Stats(str=1, agl=2, itl=2, mnd=2)
-            self.db.Race(name="Elf", stats=s3)
+            self.db.Race(name="Elf", stats=s3, faction="https://i.imgur.com/g1a0Jxg.png")
             s4 = self.db.Stats(str=0, agl=1, itl=2, mnd=4)
-            self.db.Race(name="Fairy", stats=s4)
+            self.db.Race(name="Fairy", stats=s4, faction="https://i.imgur.com/KBUV5zt.png")
             s5 = self.db.Stats(str=3, agl=3, itl=3, mnd=3)
-            self.db.Race(name="Dragon", stats=s5)
+            self.db.Race(name="Dragon", stats=s5, faction="https://i.imgur.com/oHMPKUd.png")
         self.db.commit()
 
     @db_session

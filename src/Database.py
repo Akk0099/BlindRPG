@@ -29,6 +29,7 @@ class Database:
             name = Optional(str)
             stats = Required('Stats')
             characters = Set(Character)
+            faction = Optional(str)
 
         class Stats(self.database.Entity):
             id = PrimaryKey(int, auto=True)
@@ -46,5 +47,6 @@ class Database:
             stats = Required(Stats)
             name = Optional(str)
             characters = Set(Character)
+            image = Optional(str)
 
         self.database.generate_mapping(create_tables=True)

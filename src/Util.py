@@ -16,11 +16,15 @@ def constructCharPanel(author, char):
     ##Add Race / Class / Gender
     if char["race"]:
         embed.add_field(name="Race", value=char["race"]["name"])
+        embed.set_thumbnail(
+            url=char["race"]["faction"])
     else:
         embed.add_field(name="Race", value="None")
 
     if char["job"]:
         embed.add_field(name="Job", value=char["job"]["name"])
+        embed.set_image(
+            url=char["job"]["image"])
     else:
         embed.add_field(name="Job", value="None")
 
@@ -34,10 +38,6 @@ def constructCharPanel(author, char):
     embed.add_field(name="Agility", value=char["currentStats"]["agl"])
     embed.add_field(name="Intelligence", value=char["currentStats"]["itl"])
     embed.add_field(name="Mind", value=char["currentStats"]["mnd"])
-    embed.set_image(
-        url="https://www.pinclipart.com/picdir/middle/204-2043850_maple-story-2-classes-transparent-background-maplestory-2.png")
-    embed.set_thumbnail(
-        url="https://www.pinclipart.com/picdir/middle/204-2043850_maple-story-2-classes-transparent-background-maplestory-2.png")
     return embed
 
 
@@ -119,21 +119,9 @@ async def helpInfo(channel):
     await channel.send(embed=embed)
 
 
-def failMessage(message):
-    return discord.Embed(title=message, colour=0xEE3B3B)
-
-
-def successMessage(message):
-    return discord.Embed(title=message, colour=0x55a630)
-
-
-def infoMessage(message):
-    return discord.Embed(title=message, colour=0xc9b216)
-
-
 async def chooseName(game, channel, author, name):
     if game.getChar(id=author.id):
-        await channel.send(game.changeName(id=author.id, name=name))
+        await channel.send(embed=successMessage(game.changeName(id=author.id, name=name)))
         await channel.send(
             embed=constructCharPanel(author=author, char=game.getChar(id=author.id))
         )
@@ -144,12 +132,13 @@ async def chooseName(game, channel, author, name):
 async def chooseGender(game, channel, author, gender):
     if game.getChar(id=author.id):
         if checkGender(gender):
-            await channel.send(game.changeGender(author.id, gender))
+            await channel.send(embed=successMessage(game.changeGender(author.id, gender)))
             await channel.send(
                 embed=constructCharPanel(author, game.getChar(id=author.id))
             )
         else:
-            await channel.send(failMessage("Pick Male or Female. The gender **{}** is not supported.".format(gender)))
+            await channel.send(
+                embed=failMessage("Pick Male or Female. The gender **{}** is not supported.".format(gender)))
     else:
         await notCreatedYetMessage(channel=channel)
 
@@ -157,12 +146,12 @@ async def chooseGender(game, channel, author, gender):
 async def chooseRace(game, channel, author, race):
     if game.getChar(id=author.id):
         if game.checkRace(race=race):
-            await channel.send(game.changeRace(id=author.id, race=race))
+            await channel.send(embed=successMessage(game.changeRace(id=author.id, race=race)))
             await channel.send(
                 embed=constructCharPanel(author=author, char=game.getChar(author.id))
             )
         else:
-            await channel.send(failMessage(
+            await channel.send(embed=failMessage(
                 "The race **{}** is not supported. Pick one of the follwing races: Orc/Human/Elf/Fairy/Dragon.".format(
                     race)))
     else:
@@ -172,12 +161,12 @@ async def chooseRace(game, channel, author, race):
 async def chooseJob(game, channel, author, job):
     if game.getChar(id=author.id):
         if game.checkJob(job=job):
-            await channel.send(game.changeJob(id=author.id, job=job))
+            await channel.send(embed=successMessage(game.changeJob(id=author.id, job=job)))
             await channel.send(
                 embed=constructCharPanel(author=author, char=game.getChar(id=author.id))
             )
         else:
-            await channel.send(failMessage(
+            await channel.send(embed=failMessage(
                 "The job **{}** is not supported. Pick one of the follwing jobs: Warrior/Archer/Sorcerer/Priest.".format(
                     job)))
     else:
@@ -194,7 +183,7 @@ async def getMe(game, channel, author):
 
 
 async def notCreatedYetMessage(channel):
-    await channel.send(failMessage("You don't have a character created yet. More info use !rpg help"))
+    await channel.send(embed=failMessage(message="You don't have a character created yet. More info use !rpg info"))
 
 
 async def wrongCommand(channel):
@@ -206,10 +195,6 @@ async def wrongCommand(channel):
     )
 
 
-def checkGender(gender):
-    return gender in {"Male", "Female"}
-
-
 async def dailyTrain(game, channel, author):
     if game.getChar(id=author.id):
         result = game.dailyTrain(id=author.id)
@@ -219,3 +204,19 @@ async def dailyTrain(game, channel, author):
             await channel.send(embed=failMessage(result[0]))
     else:
         await notCreatedYetMessage(channel=channel)
+
+
+def failMessage(message):
+    return discord.Embed(title=message, colour=0xEE3B3B)
+
+
+def successMessage(message):
+    return discord.Embed(title=message, colour=0x55a630)
+
+
+def infoMessage(message):
+    return discord.Embed(title=message, colour=0xc9b216)
+
+
+def checkGender(gender):
+    return gender in {"Male", "Female"}
