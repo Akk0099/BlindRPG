@@ -186,7 +186,6 @@ class BlindRPG:
 
     def dailyTrain(self, id):
         if self.checkDailyAction(id):
-            print("here")
             if self.roll100Dice():
                 return "Daily train did not succeed."
             else:
@@ -195,7 +194,6 @@ class BlindRPG:
                 self.updateInitialStats(charID=id, stat=stat, value=increase)
                 return "Daily train was successful.{} was increased by {}.".format(stat, increase)
         else:
-            print("not here")
             return "Daily action unavailable."
 
     def roll100Dice(self):

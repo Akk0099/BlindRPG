@@ -111,6 +111,7 @@ async def helpInfo(channel):
         inline=False,
     )
     embed.add_field(name="me", value="Show you character card.", inline=False)
+    embed.add_field(name="daily-train", value="Train your character to boost your stats.", inline=False)
     await channel.send(embed=embed)
 
 
@@ -218,9 +219,9 @@ def checkGender(gender):
     return gender in {"Male", "Female"}
 
 
-async def dailyTrain(client, game, channel, author):
+async def dailyTrain(game, channel, author):
     if game.getChar(id=author.id):
-        await client.get_channel(channel).send(
+        await channel.send(
             embed=await message(message=game.dailyTrain(id=author.id)))
     else:
-        await notCreatedYetMessage(client=client, channel=channel)
+        await notCreatedYetMessage(channel=channel)

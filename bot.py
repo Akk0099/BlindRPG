@@ -72,6 +72,11 @@ async def selfInfo(ctx):
     await Util.getMe(game=game, channel=ctx.channel, author=ctx.author)
 
 
+@client.command(name="daily-train")
+async def dailyTrain(ctx):
+    await Util.dailyTrain(game=game, channel=ctx.channel, author=ctx.author)
+
+
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         return await Util.wrongCommand(channel=ctx.channel)
