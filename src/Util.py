@@ -41,6 +41,20 @@ def constructCharPanel(author, char):
     return embed
 
 
+def constructItemPanel(item):
+    embed = discord.Embed(
+        title="{}".format(item["name"]),
+        colour=0x38ACD2,
+    )
+    embed.set_thumbnail(url=item["image"])
+    embed.add_field(name="Type", value=item["type"].capitalize(), inline=False)
+    embed.add_field(name="Strength", value=item["stats"]["str"])
+    embed.add_field(name="Agility", value=item["stats"]["agl"])
+    embed.add_field(name="Intelligence", value=item["stats"]["itl"])
+    embed.add_field(name="Mind", value=item["stats"]["mnd"])
+    return embed
+
+
 async def raceInfo(channel):
     embed = discord.Embed(title="Race Info", colour=0xc9b216)
     embed.add_field(name="Orc", value="STR +4 | AGL +2 | INT +0 | MND +1", inline=False)
@@ -119,6 +133,13 @@ async def helpInfo(channel):
     await channel.send(embed=embed)
 
 
+async def createChar(game, channel, author):
+    if game.getChar(id=author.id):
+        await channel.send(embed=failMessage(message="Character already exists."))
+    else:
+        await channel.send(embed=successMessage(message=game.createChar(author.id)))
+
+
 async def chooseName(game, channel, author, name):
     if game.getChar(id=author.id):
         await channel.send(embed=successMessage(game.changeName(id=author.id, name=name)))
@@ -171,6 +192,14 @@ async def chooseJob(game, channel, author, job):
                     job)))
     else:
         await notCreatedYetMessage(channel=channel)
+
+
+async def getItem(game, channel, item):
+    itemN = game.getItem(item=item)
+    if itemN:
+        await channel.send(embed=constructItemPanel(itemN))
+    else:
+        await channel.send(embed=failMessage("Item with name {} not found.".format(item)))
 
 
 async def getMe(game, channel, author):

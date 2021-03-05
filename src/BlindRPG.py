@@ -1,6 +1,7 @@
 from datetime import datetime
 from pony.orm import *
-import random
+import src.Dice as dice
+import src.DataLoader as loader
 
 
 class BlindRPG:
@@ -11,8 +12,7 @@ class BlindRPG:
 
     def __init__(self, db):
         self.db = db.database
-        self.loadJobsD()
-        self.loadRacesD()
+        loader.loadData(self.db)
 
     @db_session
     def createChar(self, id):
@@ -79,34 +79,6 @@ class BlindRPG:
             return None
 
     @db_session
-    def loadJobsD(self):
-        if not self.db.Job.select(lambda j: j.name == "Warrior").first():
-            s1 = self.db.Stats(str=4, agl=1, itl=1, mnd=1)
-            self.db.Job(name="Warrior", stats=s1, image="https://i.imgur.com/dHLGGNs.png")
-            s2 = self.db.Stats(str=1, agl=4, itl=1, mnd=1)
-            self.db.Job(name="Archer", stats=s2, image="https://i.imgur.com/XrBkP1O.png")
-            s3 = self.db.Stats(str=1, agl=1, itl=4, mnd=1)
-            self.db.Job(name="Sorcerer", stats=s3, image="https://i.imgur.com/vpZLrxn.png")
-            s4 = self.db.Stats(str=1, agl=1, itl=1, mnd=4)
-            self.db.Job(name="Priest", stats=s4, image="https://i.imgur.com/1XGAYei.png")
-        self.db.commit()
-
-    @db_session
-    def loadRacesD(self):
-        if not self.db.Race.select(lambda r: r.name == "Orc").first():
-            s1 = self.db.Stats(str=4, agl=2, itl=0, mnd=1)
-            self.db.Race(name="Orc", stats=s1, faction="https://i.imgur.com/kcXnYg3.png")
-            s2 = self.db.Stats(str=2, agl=2, itl=2, mnd=1)
-            self.db.Race(name="Human", stats=s2, faction="https://i.imgur.com/kcXnYg3.png")
-            s3 = self.db.Stats(str=1, agl=2, itl=2, mnd=2)
-            self.db.Race(name="Elf", stats=s3, faction="https://i.imgur.com/g1a0Jxg.png")
-            s4 = self.db.Stats(str=0, agl=1, itl=2, mnd=4)
-            self.db.Race(name="Fairy", stats=s4, faction="https://i.imgur.com/KBUV5zt.png")
-            s5 = self.db.Stats(str=3, agl=3, itl=3, mnd=3)
-            self.db.Race(name="Dragon", stats=s5, faction="https://i.imgur.com/oHMPKUd.png")
-        self.db.commit()
-
-    @db_session
     def to_dict_character(self, obj):
         if obj is None:
             return None
@@ -117,7 +89,6 @@ class BlindRPG:
             char['race'] = obj.race.to_dict()
         if obj.job:
             char['job'] = obj.job.to_dict()
-
         return char
 
     @db_session
@@ -175,28 +146,30 @@ class BlindRPG:
         else:
             return delta
 
+    @db_session
+    def getItem(self, item):
+        item = self.db.Item.select(lambda i: i.name == item).first()
+        if item:
+            return self.to_dict_item(item)
+        else:
+            return None
+
+    @db_session
+    def to_dict_item(self, obj):
+        if obj is None:
+            return None
+        item = obj.to_dict()
+        item['stats'] = obj.stats.to_dict()
+        return item
+
     def dailyTrain(self, id):
         if self.checkDailyAction(id):
-            if self.roll100Dice():
+            if dice.roll100Dice():
                 return "Daily train did not succeed.", False
             else:
-                increase = self.roll4Dice()
-                stat = self.rollStatDice()
+                increase = dice.roll4Dice()
+                stat = dice.rollStatDice()
                 self.updateInitialStats(charID=id, stat=stat, value=increase)
                 return "Daily train was successful. {} was increased by {}.".format(stat.upper(), increase), True
         else:
             return "Daily action unavailable.", False
-
-    def roll100Dice(self):
-        roll = random.randint(1, 100)
-        if roll <= 50:
-            return False
-        elif roll >= 51:
-            return True
-
-    def roll4Dice(self):
-        return random.randint(1, 4)
-
-    def rollStatDice(self):
-        stats = ["str", "agl", "itl", "mnd"]
-        return random.choice(stats)

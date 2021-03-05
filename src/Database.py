@@ -39,6 +39,7 @@ class Database:
             mnd = Optional(int)
             jobs = Set('Job')
             races = Set(Race)
+            items = Set('Item')
             charactersC = Set(Character, reverse='currentStats')
             charactersI = Set(Character, reverse='initialStats')
 
@@ -47,6 +48,14 @@ class Database:
             stats = Required(Stats)
             name = Optional(str)
             characters = Set(Character)
+            image = Optional(str)
+
+        class Item(self.database.Entity):
+            id = PrimaryKey(int, auto=True)
+            name = Required(str)
+            value = Required(int)
+            type = Required(str)
+            stats = Optional(Stats)
             image = Optional(str)
 
         self.database.generate_mapping(create_tables=True)

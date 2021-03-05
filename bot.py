@@ -27,7 +27,7 @@ async def in_valid_channel(ctx):
 
 @client.command(name="create")
 async def createChar(ctx):
-    await ctx.send(game.createChar(ctx.author.id))
+    await Util.createChar(game=game, channel=ctx.channel, author=ctx.author)
 
 
 @client.command(name="name")
@@ -50,6 +50,11 @@ async def chooseRace(ctx, arg):
 @client.command(name="job")
 async def chooseJob(ctx, arg):
     await Util.chooseJob(game=game, channel=ctx.channel, author=ctx.author, job=arg)
+
+
+@client.command(name="item")
+async def chooseJob(ctx, arg):
+    await Util.getItem(game=game, channel=ctx.channel, item=arg)
 
 
 @client.command(name="info")
