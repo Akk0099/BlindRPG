@@ -49,12 +49,7 @@ class BlindRPG:
         char = self.db.Character[str(id)]
         job = self.db.Job.select(lambda j: j.name == job).first()
         char.job = job
-        if char.race:
-            self.updateCharStats(charStats=char.currentStats, initStats=char.initialStats, raceStats=char.race.stats,
-                                 jobStats=job.stats)
-        else:
-            self.updateCharStats(charStats=char.currentStats, initStats=char.initialStats, jobStats=job.stats,
-                                 raceStats=None)
+        self.updateStats(char)
         self.db.commit()
         return "Character job changed !"
 
@@ -71,12 +66,7 @@ class BlindRPG:
         char = self.db.Character[str(id)]
         race = self.db.Race.select(lambda j: j.name == race).first()
         char.race = race
-        if char.job:
-            self.updateCharStats(charStats=char.currentStats, initStats=char.initialStats, raceStats=race.stats,
-                                 jobStats=char.job.stats)
-        else:
-            self.updateCharStats(charStats=char.currentStats, initStats=char.initialStats, raceStats=race.stats,
-                                 jobStats=None)
+        self.updateStats(char)
         self.db.commit()
         return "Character race changed !"
 
@@ -131,24 +121,25 @@ class BlindRPG:
         return char
 
     @db_session
-    def updateCharStats(self, charStats, initStats, jobStats, raceStats):
-        if jobStats and raceStats:
-            charStats.str = initStats.str + jobStats.str + raceStats.str
-            charStats.agl = initStats.agl + jobStats.agl + raceStats.agl
-            charStats.itl = initStats.itl + jobStats.itl + raceStats.itl
-            charStats.mnd = initStats.mnd + jobStats.mnd + raceStats.mnd
-        elif jobStats:
-            charStats.str = initStats.str + jobStats.str
-            charStats.agl = initStats.agl + jobStats.agl
-            charStats.itl = initStats.itl + jobStats.itl
-            charStats.mnd = initStats.mnd + jobStats.mnd
-        elif raceStats:
-            charStats.str = initStats.str + raceStats.str
-            charStats.agl = initStats.agl + raceStats.agl
-            charStats.itl = initStats.itl + raceStats.itl
-            charStats.mnd = initStats.mnd + raceStats.mnd
-        else:
-            charStats = initStats
+    def updateStats(self, char):
+        str = char.initialStats.str
+        agl = char.initialStats.agl
+        itl = char.initialStats.itl
+        mnd = char.initialStats.mnd
+        if (char.race):
+            str += char.race.stats.str
+            agl += char.race.stats.agl
+            itl += char.race.stats.itl
+            mnd += char.race.stats.mnd
+        if (char.job):
+            str += char.job.stats.str
+            agl += char.job.stats.agl
+            itl += char.job.stats.itl
+            mnd += char.job.stats.mnd
+        char.currentStats.str = str
+        char.currentStats.agl = agl
+        char.currentStats.itl = itl
+        char.currentStats.mnd = mnd
         self.db.commit()
 
     @db_session
