@@ -1,2 +1,2 @@
 # BlindRPG
- RPG Bot for discord.
+RPG Bot for discord.
