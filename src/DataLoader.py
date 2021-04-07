@@ -5,6 +5,7 @@ def loadData(db):
     loadJobs(db)
     loadRaces(db)
     loadSwords(db)
+    loadMobs(db)
 
 
 @db_session
@@ -50,4 +51,14 @@ def loadSwords(db):
         db.Item(name="Anellas", stats=s1, type="sword", value=1, image="https://i.imgur.com/umWnXOn.png")
         s1 = db.Stats(str=15, agl=4, itl=3, mnd=3)
         db.Item(name="Barbaric", stats=s1, type="sword", value=1, image="https://i.imgur.com/futo1b4.png")
+    db.commit()
+
+
+@db_session
+def loadMobs(db):
+    if not db.Item.select(lambda i: i.name == "OrcX" and i.type == "Orc").first():
+        s1 = db.Stats(str=1, agl=1, itl=1, mnd=1)
+        item1 = db.Item.select(lambda i: i.name == "Kaskara").first()
+        mob1 = db.Mob(name="OrcX", stats=s1, type="Orc", image="https://i.imgur.com/cqx50Sh.png")
+        db.Drop(mob=mob1, item=item1, rate=0.1)
     db.commit()

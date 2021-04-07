@@ -55,6 +55,20 @@ def constructItemPanel(item):
     return embed
 
 
+def constructMobPanel(mob):
+    embed = discord.Embed(
+        title="{}".format(mob["name"]),
+        colour=0x38ACD2,
+    )
+    embed.set_thumbnail(url=mob["image"])
+    embed.add_field(name="Type", value=mob["type"].capitalize(), inline=False)
+    embed.add_field(name="Strength", value=mob["stats"]["str"])
+    embed.add_field(name="Agility", value=mob["stats"]["agl"])
+    embed.add_field(name="Intelligence", value=mob["stats"]["itl"])
+    embed.add_field(name="Mind", value=mob["stats"]["mnd"])
+    return embed
+
+
 async def raceInfo(channel):
     embed = discord.Embed(title="Race Info", colour=0xc9b216)
     embed.add_field(name="Orc", value="STR +4 | AGL +2 | INT +0 | MND +1", inline=False)
@@ -200,6 +214,14 @@ async def getItem(game, channel, item):
         await channel.send(embed=constructItemPanel(itemN))
     else:
         await channel.send(embed=failMessage("Item with name {} not found.".format(item)))
+
+
+async def getMob(game, channel, mob):
+    mobN = game.getMob(mob=mob)
+    if mobN:
+        await channel.send(embed=constructItemPanel(mobN))
+    else:
+        await channel.send(embed=failMessage("Item with name {} not found.".format(mob)))
 
 
 async def getMe(game, channel, author):

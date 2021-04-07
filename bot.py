@@ -5,7 +5,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from src import Util, BlindRPG, Database
 
-valid_channels = {704712658330451978, 815375116254969878}
+valid_channels = {704712658330451978, 815375116254969878, 820381113121243147}
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -53,8 +53,13 @@ async def chooseJob(ctx, arg):
 
 
 @client.command(name="item")
-async def chooseJob(ctx, arg):
+async def itemInfo(ctx, arg):
     await Util.getItem(game=game, channel=ctx.channel, item=arg)
+
+
+@client.command(name="mob")
+async def mobInfo(ctx, arg):
+    await Util.getMob(game=game, channel=ctx.channel, mob=arg)
 
 
 @client.command(name="info")

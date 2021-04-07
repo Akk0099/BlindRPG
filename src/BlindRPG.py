@@ -155,6 +155,14 @@ class BlindRPG:
             return None
 
     @db_session
+    def getMob(self, mob):
+        mob = self.db.Mob.select(lambda m: m.name == mob).first()
+        if mob:
+            return self.to_dict_item(mob)
+        else:
+            return None
+
+    @db_session
     def to_dict_item(self, obj):
         if obj is None:
             return None

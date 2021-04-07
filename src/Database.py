@@ -21,6 +21,7 @@ class Database:
             race = Optional('Race')
             job = Optional('Job')
             gender = Optional(str)
+            inventory = Required('Inventory')
             initialStats = Required('Stats', reverse='charactersI')
             dailyAction = Optional(datetime, 6)
 
@@ -42,6 +43,7 @@ class Database:
             items = Set('Item')
             charactersC = Set(Character, reverse='currentStats')
             charactersI = Set(Character, reverse='initialStats')
+            mob = Set('Mob')
 
         class Job(self.database.Entity):
             id = PrimaryKey(int, auto=True)
@@ -57,5 +59,27 @@ class Database:
             type = Required(str)
             stats = Optional(Stats)
             image = Optional(str)
+            inventories = Set('Inventory')
+            drops = Set('Drop')
+
+        class Mob(self.database.Entity):
+            id = PrimaryKey(int, auto=True)
+            name = Required(str)
+            type = Required(str)
+            stats = Optional(Stats)
+            image = Optional(str)
+            drops = Set('Drop')
+
+        class Inventory(self.database.Entity):
+            id = PrimaryKey(int, auto=True)
+            char = Optional(Character)
+            wallet = Required(int)
+            items = Set(Item)
+
+        class Drop(self.database.Entity):
+            id = PrimaryKey(int, auto=True)
+            mob = Required(Mob)
+            item = Required(Item)
+            rate = Required(float)
 
         self.database.generate_mapping(create_tables=True)
