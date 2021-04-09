@@ -17,20 +17,27 @@ class Database:
             id = PrimaryKey(str)
             name = Optional(str)
             level = Optional(int)
-            currentStats = Required('Stats', reverse='charactersC')
-            race = Optional('Race')
-            job = Optional('Job')
             gender = Optional(str)
-            inventory = Required('Inventory')
-            initialStats = Required('Stats', reverse='charactersI')
             dailyAction = Optional(datetime, 6)
+            job = Optional('Job')
+            race = Optional('Race')
+            initialStats = Required('Stats', reverse='charactersI')
+            currentStats = Required('Stats', reverse='charactersC')
+            inventory = Required('Inventory')
+
+        class Job(self.database.Entity):
+            id = PrimaryKey(int, auto=True)
+            name = Optional(str)
+            image = Optional(str)
+            characters = Set(Character)
+            stats = Required('Stats')
 
         class Race(self.database.Entity):
             id = PrimaryKey(int, auto=True)
             name = Optional(str)
-            stats = Required('Stats')
-            characters = Set(Character)
             faction = Optional(str)
+            characters = Set(Character)
+            stats = Required('Stats')
 
         class Stats(self.database.Entity):
             id = PrimaryKey(int, auto=True)
@@ -38,48 +45,41 @@ class Database:
             agl = Optional(int)
             itl = Optional(int)
             mnd = Optional(int)
-            jobs = Set('Job')
-            races = Set(Race)
-            items = Set('Item')
-            charactersC = Set(Character, reverse='currentStats')
-            charactersI = Set(Character, reverse='initialStats')
-            mob = Set('Mob')
-
-        class Job(self.database.Entity):
-            id = PrimaryKey(int, auto=True)
-            stats = Required(Stats)
-            name = Optional(str)
-            characters = Set(Character)
-            image = Optional(str)
+            charactersI = Optional(Character, reverse='initialStats')
+            charactersC = Optional(Character, reverse='currentStats')
+            race = Optional(Race)
+            job = Optional(Job)
+            item = Optional('Item')
+            mob = Optional('Mob')
 
         class Item(self.database.Entity):
             id = PrimaryKey(int, auto=True)
-            name = Required(str)
-            value = Required(int)
-            type = Required(str)
-            stats = Optional(Stats)
+            name = Optional(str)
+            type = Optional(str)
             image = Optional(str)
-            inventories = Set('Inventory')
+            value = Optional(int)
+            stats = Required(Stats)
             drops = Set('Drop')
+            inventories = Set('Inventory')
 
         class Mob(self.database.Entity):
             id = PrimaryKey(int, auto=True)
             name = Required(str)
             type = Required(str)
-            stats = Optional(Stats)
             image = Optional(str)
+            stats = Required(Stats)
             drops = Set('Drop')
 
         class Inventory(self.database.Entity):
             id = PrimaryKey(int, auto=True)
-            char = Optional(Character)
             wallet = Required(int)
+            character = Optional(Character)
             items = Set(Item)
 
         class Drop(self.database.Entity):
             id = PrimaryKey(int, auto=True)
+            rate = Required(float)
             mob = Required(Mob)
             item = Required(Item)
-            rate = Required(float)
 
         self.database.generate_mapping(create_tables=True)

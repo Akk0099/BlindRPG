@@ -66,6 +66,12 @@ def constructMobPanel(mob):
     embed.add_field(name="Agility", value=mob["stats"]["agl"])
     embed.add_field(name="Intelligence", value=mob["stats"]["itl"])
     embed.add_field(name="Mind", value=mob["stats"]["mnd"])
+    drops = ""
+    for item in mob['drops']:
+        print(item)
+        drops += "{} - {}%\n".format(item['item'], item['rate'])
+    embed.add_field(name="Drops", value=drops, inline=False)
+
     return embed
 
 
@@ -219,9 +225,9 @@ async def getItem(game, channel, item):
 async def getMob(game, channel, mob):
     mobN = game.getMob(mob=mob)
     if mobN:
-        await channel.send(embed=constructItemPanel(mobN))
+        await channel.send(embed=constructMobPanel(mobN))
     else:
-        await channel.send(embed=failMessage("Item with name {} not found.".format(mob)))
+        await channel.send(embed=failMessage("Mob with name {} not found.".format(mob)))
 
 
 async def getMe(game, channel, author):

@@ -58,7 +58,9 @@ def loadSwords(db):
 def loadMobs(db):
     if not db.Item.select(lambda i: i.name == "OrcX" and i.type == "Orc").first():
         s1 = db.Stats(str=1, agl=1, itl=1, mnd=1)
-        item1 = db.Item.select(lambda i: i.name == "Kaskara").first()
         mob1 = db.Mob(name="OrcX", stats=s1, type="Orc", image="https://i.imgur.com/cqx50Sh.png")
-        db.Drop(mob=mob1, item=item1, rate=0.1)
+        item1 = db.Item.select(lambda i: i.name == "Kaskara").first()
+        item2 = db.Item.select(lambda i: i.name == "Barbaric").first()
+        db.Drop(mob=mob1, item=item1, rate=0.5)
+        db.Drop(mob=mob1, item=item2, rate=0.1)
     db.commit()

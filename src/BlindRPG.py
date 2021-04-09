@@ -18,7 +18,9 @@ class BlindRPG:
     def createChar(self, id):
         statsC = self.db.Stats(str=0, agl=0, itl=0, mnd=0)
         statsI = self.db.Stats(str=0, agl=0, itl=0, mnd=0)
-        self.db.Character(id=str(id), currentStats=statsC, initialStats=statsI, level=0, dailyAction=datetime.now())
+        inventory = self.db.Inventory(wallet=0)
+        self.db.Character(id=str(id), currentStats=statsC, initialStats=statsI, level=0, dailyAction=datetime.now(),
+                          inventory=inventory)
         self.db.commit()
         return "Character created !"
 
@@ -158,17 +160,9 @@ class BlindRPG:
     def getMob(self, mob):
         mob = self.db.Mob.select(lambda m: m.name == mob).first()
         if mob:
-            return self.to_dict_item(mob)
+            return self.to_dict_mob(mob)
         else:
             return None
-
-    @db_session
-    def to_dict_item(self, obj):
-        if obj is None:
-            return None
-        item = obj.to_dict()
-        item['stats'] = obj.stats.to_dict()
-        return item
 
     def dailyTrain(self, id):
         if self.checkDailyAction(id):
@@ -181,3 +175,27 @@ class BlindRPG:
                 return "Daily train was successful. {} was increased by {}.".format(stat.upper(), increase), True
         else:
             return "Daily action unavailable.", False
+
+    @db_session
+    def to_dict_item(self, obj):
+        if obj is None:
+            return None
+        item = obj.to_dict()
+        item['stats'] = obj.stats.to_dict()
+        return item
+
+    @db_session
+    def to_dict_mob(self, obj):
+        if obj is None:
+            return None
+        mob = obj.to_dict()
+        mob['stats'] = obj.stats.to_dict()
+        mob['drops'] = []
+        for element in obj.drops:
+            drop = element.to_dict()
+            drop['item'] = element.item.name
+            mob['drops'].append(drop)
+        # mob['drops'] = dict.fromkeys(, 0)
+        # print(mob['drops'])
+
+        return mob
