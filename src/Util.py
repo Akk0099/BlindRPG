@@ -153,11 +153,11 @@ async def helpInfo(channel):
     await channel.send(embed=embed)
 
 
-async def createChar(game, channel, author):
+async def createChar(game, channel, author, name):
     if game.getChar(id=author.id):
         await channel.send(embed=failMessage(message="Character already exists."))
     else:
-        await channel.send(embed=successMessage(message=game.createChar(author.id)))
+        await channel.send(embed=successMessage(message=game.createChar(author.id, name)))
 
 
 async def chooseName(game, channel, author, name):

@@ -26,8 +26,8 @@ async def in_valid_channel(ctx):
 
 
 @client.command(name="create")
-async def createChar(ctx):
-    await Util.createChar(game=game, channel=ctx.channel, author=ctx.author)
+async def createChar(ctx, *args):
+    await Util.createChar(game=game, channel=ctx.channel, author=ctx.author, name=args)
 
 
 @client.command(name="name")
