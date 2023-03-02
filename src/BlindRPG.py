@@ -6,9 +6,6 @@ import src.ToDict as to_dict
 
 
 class BlindRPG:
-    chars = {}
-    jobs = {}
-    races = {}
     db = None
 
     def __init__(self, db):
